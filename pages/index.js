@@ -22,7 +22,7 @@ function Home({ resources }) {
 }
 
 export async function getServerSideProps() {  
-  const resData = await fetch("http://localhost:3001/api/resource");
+  const resData = await fetch(process.env.URL_API + "/resource");
   const data = await resData.json();
 
   return {
