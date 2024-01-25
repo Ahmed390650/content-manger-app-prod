@@ -38,7 +38,7 @@ const resourceById = ({ resources }) => {
 };
 
 export async function getStaticPaths() {
-  const resData = await fetch("http://localhost:3001/api/resource");
+  const resData = await fetch(process.env.API_URL+"/resource");
   const data = await resData.json();
   const paths = data.map((resouce) => {
     return {
@@ -52,9 +52,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const resData = await fetch(
-    `http://localhost:3001/api/resource/${params.id}`
-  );
+  const resData = await fetch(`${process.env.API_URL  }/resource/${params.id}`);
   const data = await resData.json();
 
   return {
