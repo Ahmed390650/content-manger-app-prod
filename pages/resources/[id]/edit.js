@@ -1,32 +1,41 @@
+
+import Layout from "@/components/Layout";
+import ResoucesForm from "@/components/ResourceForm";
 import axios from "axios";
 
-const { default: ResoucesForm } = require("@/components/ResourceForm");
+const ResourceEdit = ({resource}) => {
 
-const ResouceEdit = ({ resources }) => {
+  const updateResource = (formData) => {
+    axios.patch("/api/resources", formData)
+      .then(_ => alert("Data has been Updated!"))
+      .catch(err => alert(err?.response?.data));
+  }
 
+  return (
+    <Layout>
+      <div className="container">
+        <div className="columns">
+          <div className="column is-8 is-offset-2">
+            <ResoucesForm
+              initialData={resource}
+              onFormSubmit={updateResource}
+            />
+          </div>
+        </div>
+      </div>
+    </Layout>
+  )
+}
 
-
-  const editResouce = formData => {
-    axios
-    .patch("/api/resources", {
-      ...formData,
-    })
-    .then((res) => alert("data was edit success"))
-    .catch((err) =>  alert(err.response.data));
-  };
-  return <ResoucesForm initalData={resources} submitForm={editResouce} />;
-};
-
-export async function getServerSideProps({ params }) {
-  const resData = await fetch(
-    `http://localhost:3001/api/resource/${params.id}`
-  );
-  const data = await resData.json();
+export async function getServerSideProps({params}) {
+  const dataRes = await fetch(`${process.env.API_URL}/resources/${params.id}`);
+  const data = await dataRes.json();
 
   return {
     props: {
-      resources: data,
-    },
-  };
+      resource: data
+    }
+  }
 }
-export default ResouceEdit;
+
+export default ResourceEdit;
